@@ -1,5 +1,8 @@
 import { Form } from "@remix-run/react";
 
+// chakra
+import { Flex, Box, Input, Button, Heading } from "@chakra-ui/react";
+
 import type { ActionFunctionArgs } from "@remix-run/node";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -17,14 +20,23 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function Login() {
   return (
-    <div>
-      <h1>Form</h1>
-
+    <Flex
+      w="100%"
+      minH="100vh"
+      flexDir="column"
+      justifyContent="center"
+      alignItems="center"
+    >
+      <Heading>FORM</Heading>
       <Form method="post">
-        <input type="text" name="username" />
-        <input type="text" name="city" />
-        <button type="submit">Submit</button>
+        <Box maxW="500px">
+          <Input type="text" name="username" />
+          <Input type="text" name="city" mt="20px" />
+          <Button type="submit" mt="20px" width="100%">
+            SUBMIT
+          </Button>
+        </Box>
       </Form>
-    </div>
+    </Flex>
   );
 }

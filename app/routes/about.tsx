@@ -1,7 +1,22 @@
 import { useLoaderData } from "@remix-run/react";
-import { json } from "@remix-run/node";
 
+// chakra
+import { Box, Flex } from "@chakra-ui/react";
+
+// components
 import { AboutDetail } from "~/components/AboutDetail";
+
+interface User {
+  id: string;
+
+  avatar: string;
+
+  email: string;
+
+  first_name: string;
+
+  last_name: string;
+}
 
 /**
  * 서버 사이드 렌더링
@@ -15,20 +30,44 @@ import { AboutDetail } from "~/components/AboutDetail";
  * `json` 함수의 역할은 content-type을 application/json으로 설정
  * 또한 loader의 경우 이미 데이터가 로딩 되어 있는 것을 보장
  */
-export const loader = async () => {
+export const loader = async (): Promise<User[]> => {
   const res = await fetch("https://reqres.in/api/users?page=2");
   const data = await res.json();
 
-  return json(data);
+  return data.data;
 };
+
 export default function About() {
-  const datas = useLoaderData();
-  console.log(datas);
+  const datas: User[] = useLoaderData();
 
   return (
-    <div>
-      About
-      <AboutDetail />
-    </div>
+    <Flex
+      w="100%"
+      h="100%"
+      minH="100vh"
+      alignItems="center"
+      justifyContent="center"
+    >
+      <Box>
+        <Flex
+          w="100%"
+          h="100%"
+          alignItems="center"
+          justifyContent="center"
+          flexWrap="wrap"
+          gap="20px"
+        >
+          {datas.map((data: User) => (
+            <AboutDetail
+              key={data.id}
+              avatar={data.avatar}
+              email={data.email}
+              first_name={data.first_name}
+              last_name={data.last_name}
+            />
+          ))}
+        </Flex>
+      </Box>
+    </Flex>
   );
 }
