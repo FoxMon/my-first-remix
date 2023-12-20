@@ -8,14 +8,23 @@ import type { ActionFunctionArgs } from "@remix-run/node";
 export const action = async ({ request }: ActionFunctionArgs) => {
   const body = await request.formData();
 
-  const username = body.get("username");
-  const city = body.get("city");
+  const name = body.get("name");
+  const job = body.get("job");
 
-  console.group("Form");
-  console.log(username);
-  console.log(city);
+  const res = await fetch("https://reqres.in/api/users", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: name,
+      job: job,
+    }),
+  });
 
-  return body;
+  const data = await res.json();
+
+  return data;
 };
 
 export default function Login() {
@@ -30,8 +39,8 @@ export default function Login() {
       <Heading>FORM</Heading>
       <Form method="post">
         <Box maxW="500px">
-          <Input type="text" name="username" />
-          <Input type="text" name="city" mt="20px" />
+          <Input type="text" name="name" />
+          <Input type="text" name="job" mt="20px" />
           <Button type="submit" mt="20px" width="100%">
             SUBMIT
           </Button>
